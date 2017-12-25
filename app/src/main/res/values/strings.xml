@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NativeTest</string>
+    <string name="turn_on_flashlight">turn_on</string>
+    <string name="turn_off_flashlight">turn_off</string>
+    <string name="read_storage_rationale">Read Storage</string>
+    <string name="write_storage_rationale">Write Storage</string>
+</resources>
