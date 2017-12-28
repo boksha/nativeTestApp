@@ -1,6 +1,5 @@
 package com.example.miodragmilosevic.nativetest.filters.javaFilters;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.example.miodragmilosevic.nativetest.filters.ImageFilter;

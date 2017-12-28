@@ -29,5 +29,5 @@ public interface ImageProcessor {
     int ONE_COLOR = 7;
     int SNOW = 8;
 
-    Single<Bitmap> applyFilter(Bitmap originalBitmap,@Type int type);
+    Bitmap applyFilter(Bitmap originalBitmap,@Type int type);
 }

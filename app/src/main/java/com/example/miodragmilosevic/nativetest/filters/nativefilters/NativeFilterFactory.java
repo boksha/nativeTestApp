@@ -1,4 +1,4 @@
-package com.example.miodragmilosevic.nativetest.filters.javaFilters;
+package com.example.miodragmilosevic.nativetest.filters.nativefilters;
 
 import com.example.miodragmilosevic.nativetest.filters.ImageFilter;
 import com.example.miodragmilosevic.nativetest.filters.ImageProcessor;
@@ -12,10 +12,10 @@ import static com.example.miodragmilosevic.nativetest.filters.ImageProcessor.PIX
 import static com.example.miodragmilosevic.nativetest.filters.ImageProcessor.SNOW;
 
 /**
- * Created by miodrag.milosevic on 12/15/2017.
+ * Created by miodrag.milosevic on 12/28/2017.
  */
 
-public class JavaFilterFactory {
+public class NativeFilterFactory {
 
     public static ImageFilter getFilter(@ImageProcessor.Type int type){
         if (type == GRAYSCALE) {

@@ -17,6 +17,7 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
+              src/main/cpp/color.cpp
              src/main/cpp/nativefacade.cpp )
 # Add the directories where the Cpp header files are to let CMake find them during compile time
 include_directories(src/main/cpp/)

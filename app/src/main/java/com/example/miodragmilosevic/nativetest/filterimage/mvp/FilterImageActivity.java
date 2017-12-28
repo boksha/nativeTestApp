@@ -15,6 +15,7 @@ import com.example.miodragmilosevic.nativetest.R;
 import com.example.miodragmilosevic.nativetest.filterimage.FilterAdapter;
 import com.example.miodragmilosevic.nativetest.filterimage.FilterItem;
 import com.example.miodragmilosevic.nativetest.filters.JavaImageProcessor;
+import com.example.miodragmilosevic.nativetest.filters.NativeImageProcessor;
 import com.example.miodragmilosevic.nativetest.histogram.HistogramActivity;
 import com.squareup.picasso.Picasso;
 
@@ -46,7 +47,7 @@ public class FilterImageActivity extends AppCompatActivity implements Contract.V
         });
 
         mOriginalBitmap = BitmapFactory.decodeFile((imagePath));
-        mPresenter = new FilterImagePresenter(this, new FilterImageRepository(new JavaImageProcessor()));
+        mPresenter = new FilterImagePresenter(this, new FilterImageRepository(new NativeImageProcessor()));
 //        mFullScreenImage.setImageBitmap(mOriginalBitmap);
         Picasso.with(this).load(new File(imagePath)).fit().centerInside().into(mFullScreenImage);
         initFilterRecyclerView();

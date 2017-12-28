@@ -19,6 +19,6 @@ public class FilterImageRepository implements Contract.Repository {
 
     @Override
     public Single<Bitmap> applyFilter(Bitmap originalBitmap, int type) {
-        return mImageProcessor.applyFilter(originalBitmap,type);
+        return Single.fromCallable(() -> mImageProcessor.applyFilter(originalBitmap,type));
     }
 }
