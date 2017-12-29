@@ -17,7 +17,15 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-              src/main/cpp/color.cpp
+
+             src/main/cpp/NegativeFilter.cpp
+             src/main/cpp/TvFilter.cpp
+             src/main/cpp/SnowFilter.cpp
+             src/main/cpp/OneColorFilter.cpp
+             src/main/cpp/PixelateFilter.cpp
+             src/main/cpp/GrayScaleFilter.cpp
+             src/main/cpp/NoiseFilter.cpp
+             src/main/cpp/color.cpp
              src/main/cpp/nativefacade.cpp )
 # Add the directories where the Cpp header files are to let CMake find them during compile time
 include_directories(src/main/cpp/)
