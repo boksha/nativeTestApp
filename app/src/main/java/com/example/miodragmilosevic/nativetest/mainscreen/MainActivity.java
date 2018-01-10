@@ -3,6 +3,7 @@ package com.example.miodragmilosevic.nativetest.mainscreen;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +16,8 @@ import com.example.miodragmilosevic.nativetest.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.opencv.android.OpenCVLoader;
+
 public class MainActivity extends AppCompatActivity {
     TextView tv;
 
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("Miki", "onCreate: ");
 
         // Example of a call to a native method
         tv =  findViewById(R.id.sample_text);
@@ -33,6 +37,11 @@ public class MainActivity extends AppCompatActivity {
 //        Log.d("Miki", calculateArea(5.5f));
         tv.setText(NativeHelper.getInstance().stringFromJNI()
                 + NativeHelper.getInstance().getMemberFieldFromNative(new MashData(4)));
+        if (!OpenCVLoader.initDebug()) {
+            Log.e("Miki", "  OpenCVLoader.initDebug(), not working.");
+        } else {
+            Log.d("Miki", "  OpenCVLoader.initDebug(), working.");
+        }
     }
 
     private void scan() {
