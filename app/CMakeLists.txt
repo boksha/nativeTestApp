@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.4.1)
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
-
+include_directories(C:\\Users\\miodrag.milosevic\\AndroidStudioProjects\\NativeTest\\OpenCV-3.1.0-android-sdk\\OpenCV-android-sdk\\sdk\\native\\jni\\include)
 add_library( # Sets the name of the library.
              nativetest
 
@@ -45,10 +45,15 @@ find_library( # Sets the name of the path variable.
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
+# [EDIT] Similar to above lines, add the OpenCV library
+add_library( lib_opencv SHARED IMPORTED )
+
+set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION C:\\Users\\miodrag.milosevic\\AndroidStudioProjects\\NativeTest\\openCVLibrary310\\src\\main\\jniLibs\\${ANDROID_ABI}\\libopencv_java3.so)
 
 target_link_libraries( # Specifies the target library.
                        nativetest
-
+                       #add openCV Miki
+                        lib_opencv
                        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib} )

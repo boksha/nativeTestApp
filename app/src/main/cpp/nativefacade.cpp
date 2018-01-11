@@ -10,7 +10,13 @@
 #include "OneColorFilter.h"
 #include "SnowFilter.h"
 #include "TvFilter.h"
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/features2d.hpp>
+#include <vector>
 
+using namespace std;
+using namespace cv;
 extern "C"
 JNIEXPORT jstring
 
@@ -161,5 +167,78 @@ Java_com_example_miodragmilosevic_nativetest_NativeHelper_tvFilter(JNIEnv *env, 
     filter.transformPixels(pixelArray,imageWidth,imageHeight);
     env->ReleaseIntArrayElements(pixelArray_, pixelArray, 0);
     return pixelArray_;
+
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_miodragmilosevic_nativetest_NativeHelper_findFeatures(JNIEnv *env, jclass type,
+                                                                       jlong addrGray,
+                                                                       jlong addrRgba) {
+
+    Mat& mGr  = *(Mat*)addrGray;
+    Mat& mRgb = *(Mat*)addrRgba;
+    vector<KeyPoint> v;
+
+    Ptr<FeatureDetector> detector = FastFeatureDetector::create(50);
+    detector->detect(mGr, v);
+    for( unsigned int i = 0; i < v.size(); i++ )
+    {
+        const KeyPoint& kp = v[i];
+        circle(mRgb, Point(kp.pt.x, kp.pt.y), 10, Scalar(255,0,0,255));
+    }
+
+}extern "C"
+JNIEXPORT jint JNICALL
+Java_com_example_miodragmilosevic_nativetest_NativeHelper_detectEdges(JNIEnv *env, jclass type,
+                                                                      jlong mAddrInput,
+                                                                      jlong mAddrOutput) {
+
+    Mat& mInput  = *(Mat*)mAddrInput;
+    Mat& mOutput = *(Mat*)mAddrOutput;
+
+    cvtColor(mInput, mOutput, COLOR_BGR2GRAY);
+//    Canny(*img, *dst, 10, 100, 3);
+    Canny(mInput, mOutput, 50, 150,3);
+    if(mInput.rows == mOutput.rows && mInput.cols == mOutput.cols) return 1;
+    return 0;
+
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_miodragmilosevic_nativetest_NativeHelper_cartoonify(JNIEnv *env, jclass type,
+                                                                     jlong rgb,
+                                                                     jlong gray) {
+
+    const int MEDIAN_BLUR_FILTER_SIZE = 7;
+    const int LAPLACIAN_FILTER_SIZE = 5;
+    const int EDGES_THRESHOLD = 30;
+    int repetitions = 5;
+    int kSize = 9;
+    double sigmaColor = 9;
+    double sigmaSpace = 7;
+
+    cv::Mat& edges = *(cv::Mat *) gray;
+    cv::medianBlur(edges, edges, MEDIAN_BLUR_FILTER_SIZE);
+    cv::Laplacian(edges, edges, CV_8U, LAPLACIAN_FILTER_SIZE);
+    cv::Mat mask; cv::threshold(edges, mask, EDGES_THRESHOLD, 255, CV_THRESH_BINARY_INV);
+
+    cv::Mat& src = *(cv::Mat *) rgb;
+    cv::cvtColor(src,src,CV_RGBA2RGB);
+    cv::Size size = src.size();
+    cv::Size smallSize;
+    smallSize.width = size.width/4;
+    smallSize.height = size.height/4;
+    cv::Mat smallImg = cv::Mat(smallSize, CV_8UC3);
+    resize(src, smallImg, smallSize, 0, 0, CV_INTER_LINEAR);
+
+    cv::Mat tmp = cv::Mat(smallSize, CV_8UC3);
+
+    for(int i=0; i<repetitions;i++){
+        bilateralFilter(smallImg, tmp, kSize, sigmaColor, sigmaSpace);
+        bilateralFilter(tmp, smallImg, kSize, sigmaColor, sigmaSpace);
+    }
+
+    cv::Mat bigImg;
+    resize(smallImg, bigImg, size, 0, 0, CV_INTER_LINEAR);
+    cv::Mat dst; bigImg.copyTo(dst,mask);
+    cv::medianBlur(dst, src, MEDIAN_BLUR_FILTER_SIZE-4);
 
 }

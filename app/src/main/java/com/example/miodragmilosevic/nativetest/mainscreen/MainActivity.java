@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.miodragmilosevic.nativetest.opencv.OpenCvActivity;
 import com.example.miodragmilosevic.nativetest.scan.CustomScannerActivity;
 import com.example.miodragmilosevic.nativetest.imagegallery.mvp.ImageGalleryActivity;
 import com.example.miodragmilosevic.nativetest.MashData;
@@ -31,17 +32,19 @@ public class MainActivity extends AppCompatActivity {
         tv =  findViewById(R.id.sample_text);
         Button scanBtn = findViewById(R.id.scan_button);
         scanBtn.setOnClickListener((view)-> scan());
+        Button opencvBtn = findViewById(R.id.opencv_button);
+        opencvBtn.setOnClickListener((view)-> openCV());
 //        Log.d("Miki", calculateArea(5.5f));
         Button loadBtn = findViewById(R.id.load_images_btn);
         loadBtn.setOnClickListener((view)-> startActivity(new Intent(this,ImageGalleryActivity.class)));
 //        Log.d("Miki", calculateArea(5.5f));
         tv.setText(NativeHelper.getInstance().stringFromJNI()
                 + NativeHelper.getInstance().getMemberFieldFromNative(new MashData(4)));
-        if (!OpenCVLoader.initDebug()) {
-            Log.e("Miki", "  OpenCVLoader.initDebug(), not working.");
-        } else {
-            Log.d("Miki", "  OpenCVLoader.initDebug(), working.");
-        }
+
+    }
+
+    private void openCV() {
+        startActivity(new Intent(this,OpenCvActivity.class));
     }
 
     private void scan() {

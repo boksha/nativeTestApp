@@ -1,4 +1,4 @@
 include ':app'
 include ':viewkitlibrary'
 project(':viewkitlibrary').projectDir = new File('..\\ViewKit\\viewkitlibrary')
-include ':openCVLibrary340'
+include ':openCVLibrary310'

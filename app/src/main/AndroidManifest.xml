@@ -54,6 +54,15 @@
         <activity android:name=".imagegallery.mvp.ImageGalleryActivity" />
         <activity android:name=".filterimage.mvp.FilterImageActivity" />
         <activity android:name=".histogram.HistogramActivity" />
+        <activity android:name=".opencv.OpenCvActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <!--<activity-->
             <!--android:name=".TabbedScanning"-->
             <!--android:theme="@style/Theme.AppCompat"-->

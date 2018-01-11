@@ -39,5 +39,11 @@ public class NativeHelper {
     public native int[] snowFilter(int[] pixelArray, int imageWidth, int imageHeight);
 
     public native int[] tvFilter(int[] pixelArray, int imageWidth, int imageHeight);
+/////////////////
 
+//    public static native int convertGray(long mAddrRgba,  long mAddrGray);
+    public static native int detectEdges(long mAddrInput,  long mAddrOutput);
+    public static native void cartoonify(long mAddrRgba,  long mAddrGray);
+
+    public static native void findFeatures(long nativeObjAddr, long nativeObjAddr1);
 }
