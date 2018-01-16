@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/NativeTest.iml" filepath="$PROJECT_DIR$/NativeTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/openCVLibrary310/openCVLibrary310.iml" filepath="$PROJECT_DIR$/openCVLibrary310/openCVLibrary310.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../ViewKit/viewkitlibrary/viewkitlibrary.iml" filepath="$PROJECT_DIR$/../ViewKit/viewkitlibrary/viewkitlibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/viewkitlibrary/viewkitlibrary.iml" filepath="$PROJECT_DIR$/viewkitlibrary/viewkitlibrary.iml" />
     </modules>
   </component>
 </project>

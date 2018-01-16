@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.4.1)
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
-include_directories(${CMAKE_SOURCE_DIR}\\..\\OpenCV-3.1.0-android-sdk\\OpenCV-android-sdk\\sdk\\native\\jni\\include)
+include_directories(${CMAKE_SOURCE_DIR}\\..\\openCVLibrary310\\src\\main\\jniLibs\\include)
 add_library( # Sets the name of the library.
              nativetest
 
