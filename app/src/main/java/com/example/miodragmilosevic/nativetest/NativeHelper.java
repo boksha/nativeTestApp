@@ -1,5 +1,7 @@
 package com.example.miodragmilosevic.nativetest;
 
+import android.content.res.AssetManager;
+
 /**
  * Created by miodrag.milosevic on 11/24/2017.
  */
@@ -46,4 +48,8 @@ public class NativeHelper {
     public static native void cartoonify(long mAddrRgba,  long mAddrGray);
 
     public static native void findFeatures(long nativeObjAddr, long nativeObjAddr1);
+
+    public static native void faceDetection(long nativeObjAddr);
+    public static native void initCascadeClassifiers(String absolutePathFace,String absolutePathEyes);
+    public static native void initCascadeClassifiers(AssetManager mgr);
 }

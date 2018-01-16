@@ -11,12 +11,22 @@
 #include "SnowFilter.h"
 #include "TvFilter.h"
 #include <opencv2/core.hpp>
+#include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/features2d.hpp>
 #include <vector>
+#include <android/log.h>
+#define LOG_TAG "MikiNdk"
+#define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
 using namespace std;
 using namespace cv;
+CascadeClassifier face_cascade;
+CascadeClassifier eyes_cascade;
+void detect(Mat &mat);
+
 extern "C"
 JNIEXPORT jstring
 
@@ -168,7 +178,10 @@ Java_com_example_miodragmilosevic_nativetest_NativeHelper_tvFilter(JNIEnv *env, 
     env->ReleaseIntArrayElements(pixelArray_, pixelArray, 0);
     return pixelArray_;
 
-}extern "C"
+}
+
+//openCV
+extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_miodragmilosevic_nativetest_NativeHelper_findFeatures(JNIEnv *env, jclass type,
                                                                        jlong addrGray,
@@ -241,4 +254,68 @@ Java_com_example_miodragmilosevic_nativetest_NativeHelper_cartoonify(JNIEnv *env
     cv::Mat dst; bigImg.copyTo(dst,mask);
     cv::medianBlur(dst, src, MEDIAN_BLUR_FILTER_SIZE-4);
 
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_miodragmilosevic_nativetest_NativeHelper_faceDetection(JNIEnv *env, jclass type,
+                                                                        jlong nativeObjAddr) {
+
+    Mat& frame  = *(Mat*)nativeObjAddr;
+    detect(frame);
+
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_miodragmilosevic_nativetest_NativeHelper_initCascadeClassifiers__Ljava_lang_String_2Ljava_lang_String_2(
+        JNIEnv *env, jclass type, jstring absolutePathFace_, jstring absolutePathEyes_) {
+    const char *absolutePathFace = env->GetStringUTFChars(absolutePathFace_, 0);
+    const char *absolutePathEyes = env->GetStringUTFChars(absolutePathEyes_, 0);
+    string faceCascadeFileName(absolutePathFace);
+    string eyesCascadeFileName(absolutePathEyes);
+    //-- 1. Load the cascades
+    if( !face_cascade.load( faceCascadeFileName ) ){ LOGE("Miki initCascadeClassifiers failed"); return ; };
+    if( !eyes_cascade.load( eyesCascadeFileName ) ){ LOGE("Miki initCascadeClassifiers failed");  return ; };
+    LOGD("Miki initCascadeClassifiers succed");
+    env->ReleaseStringUTFChars(absolutePathFace_, absolutePathFace);
+    env->ReleaseStringUTFChars(absolutePathEyes_, absolutePathEyes);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_miodragmilosevic_nativetest_NativeHelper_initCascadeClassifiers__Landroid_content_res_AssetManager_2(
+        JNIEnv *env, jclass type, jobject mgr) {
+
+    // TODO
+
+}
+
+void detect(Mat &frame){
+
+    std::vector<Rect> faces;
+    Mat frame_gray;
+
+    cvtColor( frame, frame_gray, CV_BGR2GRAY );
+    equalizeHist( frame_gray, frame_gray );
+
+    //-- Detect faces
+    face_cascade.detectMultiScale( frame_gray, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(30, 30) );
+
+    for( size_t i = 0; i < faces.size(); i++ )
+    {
+        Point center( faces[i].x + faces[i].width*0.5, faces[i].y + faces[i].height*0.5 );
+        ellipse( frame, center, Size( faces[i].width*0.5, faces[i].height*0.5), 0, 0, 360, Scalar( 255, 0, 255 ), 4, 8, 0 );
+
+        Mat faceROI = frame_gray( faces[i] );
+        std::vector<Rect> eyes;
+
+        //-- In each face, detect eyes
+        eyes_cascade.detectMultiScale( faceROI, eyes, 1.1, 2, 0 |CV_HAAR_SCALE_IMAGE, Size(30, 30) );
+
+        for( size_t j = 0; j < eyes.size(); j++ )
+        {
+            Point center( faces[i].x + eyes[j].x + eyes[j].width*0.5, faces[i].y + eyes[j].y + eyes[j].height*0.5 );
+            int radius = cvRound( (eyes[j].width + eyes[j].height)*0.25 );
+            circle( frame, center, radius, Scalar( 255, 0, 0 ), 4, 8, 0 );
+        }
+    }
 }
